@@ -1,24 +1,23 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 const bcrypt = require("bcrypt");
 
-const userSchema = new mongoose.Schema({
-  name: {
+const userSchema = new Schema({
+  username: {
     type: String,
     required: true,
-    minLength: 3,
-    maxLength: 50,
+    minlength: 3,
+    maxlength: 50,
   },
   email: {
     type: String,
     required: true,
-    minLength: 6,
-    maxLength: 50,
+    minlength: 6,
+    maxlength: 50,
   },
   password: {
     type: String,
     required: true,
-    minLength: 8,
-    maxLength: 1024,
   },
   role: {
     type: String,
@@ -31,24 +30,29 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-//instance methods
+// instance methods
 userSchema.methods.isStudent = function () {
   return this.role == "student";
 };
 
-userSchema.methods.isInstructor = function () {
+userSchema.methods.isIsntructor = function () {
   return this.role == "instructor";
 };
 
 userSchema.methods.comparePassword = async function (password, cb) {
-  let result = await bcrypt.compare(password, this.password);
-  return cb(null, result);
+  let rsesult;
+  try {
+    result = await bcrypt.compare(password, this.password);
+    return cb(null, result);
+  } catch (e) {
+    return cb(e, result);
+  }
 };
 
-//mongoose middlewares
-//若使用者為新用戶,或者是正在改密碼,則將密碼進行走湊處理
+// mongoose middlewares
+// 若使用者為新用戶，或者是正在更改密碼，則將密碼進行雜湊處理
 userSchema.pre("save", async function (next) {
-  //this 代表 mongoDB 內的 document
+  // this 代表 mongoDB 內的 document
   if (this.isNew || this.isModified("password")) {
     const hashValue = await bcrypt.hash(this.password, 10);
     this.password = hashValue;
