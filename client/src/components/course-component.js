@@ -14,10 +14,9 @@ const CourseComponent = ({ currentUser, setCurrentUser }) => {
     if (currentUser) {
       _id = currentUser.user._id;
       if (currentUser.user.role == "instructor") {
-        console.log("teacher", _id);
         CourseService.get(_id)
           .then((data) => {
-            console.log("data", data);
+            console.log("老師data", data);
             setCourseData(data.data);
           })
           .catch((e) => {
@@ -26,7 +25,7 @@ const CourseComponent = ({ currentUser, setCurrentUser }) => {
       } else if (currentUser.user.role == "student") {
         CourseService.getEnrolledCourses(_id)
           .then((data) => {
-            console.log("data", data);
+            console.log("學生data", data);
             setCourseData(data.data);
           })
           .catch((e) => {

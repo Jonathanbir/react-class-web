@@ -51,6 +51,20 @@ router.get("/findByName/:name", async (req, res) => {
   }
 });
 
+// 讓學生透過課程id來註冊新課程
+router.post("/enroll/:_id", async (req, res) => {
+  let { _id } = req.params;
+  try {
+    let course = await Course.findOne({ _id }).exec();
+    //jwt
+    course.students.push(req.user._id);
+    await course.save();
+    return res.send("註冊完成");
+  } catch (e) {
+    return res.send(e);
+  }
+});
+
 // 用課程id尋找課程
 router.get("/:_id", async (req, res) => {
   let { _id } = req.params;
