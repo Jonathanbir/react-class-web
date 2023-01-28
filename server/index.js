@@ -7,8 +7,9 @@ const authRoute = require("./routes").auth;
 const courseRoute = require("./routes").course;
 const passport = require("passport");
 require("./config/passport")(passport);
+const cors = require("cors");
 
-let port = 8089;
+let port = 8090;
 
 //連結MongoDB
 mongoose
@@ -23,6 +24,7 @@ mongoose
 //middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 app.use("/api/user", authRoute);
 //course route 應該被jwt保護
