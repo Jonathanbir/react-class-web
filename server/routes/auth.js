@@ -53,7 +53,7 @@ router.post("/login", async (req, res) => {
     if (isMatch) {
       // 製作json web token
       const tokenObject = { _id: foundUser._id, email: foundUser.email };
-      const token = jwt.sign(tokenObject, "我喜歡熊貓與柴犬");
+      const token = jwt.sign(tokenObject, process.env.PASSPORT_SECRET);
 
       return res.send({
         message: "成功登入",
