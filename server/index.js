@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const authRoute = require("./routes").auth;
 
-let port = 8082;
+let port = 8088;
 
 //連結MongoDB
 mongoose
